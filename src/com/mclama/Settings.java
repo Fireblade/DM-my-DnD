@@ -24,6 +24,7 @@ public class Settings {
 	}
 	
 	public void saveSettings(){
+		
 		File saveDir = new File(app.workDir + App.fSep + "Campaigns" + App.fSep + app.campaign.getName() + App.fSep + "Settings.txt");
 		if(true){
 			
