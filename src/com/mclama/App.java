@@ -147,7 +147,7 @@ public class App extends JFrame {
 	private JCheckBox chckbxAlive;
 	private JTextField txtd;
 	private JList list_Characters;
-	private JTextArea text_Char_Spells;
+	private JTextArea textArea_Char_Spells;
 	private JCheckBox chckbxDead;
 	private JButton btnRollStats;
 	private JLabel lblRollFor;
@@ -308,12 +308,12 @@ public class App extends JFrame {
 		scrollPane_1.setBounds(545, 199, 144, 196);
 		panel_Character.add(scrollPane_1);
 		
-		text_Char_Spells = new JTextArea();
-		text_Char_Spells.addKeyListener(new KeyAdapter() {
+		textArea_Char_Spells = new JTextArea();
+		textArea_Char_Spells.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(!textField_Char_Name.getText().equals("")){
-					character.setSpellsKnown(text_Char_Spells.getText());
+					character.setSpellsKnown(textArea_Char_Spells.getText());
 
 					if(!character.getName().equals(textField_Char_Name.getText())){
 						character.setName(textField_Char_Name.getText());
@@ -323,8 +323,8 @@ public class App extends JFrame {
 				}
 			}
 		});
-		text_Char_Spells.setText("Cantrips\nLevel 1 - (0)\nLevel 2 - (0)\nLevel 3 - (0)\nLevel 4 - (0)\nLevel 5 - (0)\nLevel 6 - (0)\nLevel 7 - (0)\nLevel 8 - (0)\nLevel 9 - (0)");
-		scrollPane_1.setViewportView(text_Char_Spells);
+		textArea_Char_Spells.setText("Cantrips\nLevel 1 - (0)\nLevel 2 - (0)\nLevel 3 - (0)\nLevel 4 - (0)\nLevel 5 - (0)\nLevel 6 - (0)\nLevel 7 - (0)\nLevel 8 - (0)\nLevel 9 - (0)");
+		scrollPane_1.setViewportView(textArea_Char_Spells);
 		
 		JLabel lblNotes = new JLabel("Notes:");
 		lblNotes.setBounds(12, 184, 55, 16);
@@ -964,7 +964,7 @@ public class App extends JFrame {
 				textField_Char_Level.setText("");
 				
 				textArea_Char_Notes.setText("");
-				text_Char_Spells.setText("Cantrips\nLevel 1 - (0)\nLevel 2 - (0)\nLevel 3 - (0)\nLevel 4 - (0)\nLevel 5 - (0)\nLevel 6 - (0)\nLevel 7 - (0)\nLevel 8 - (0)\nLevel 9 - (0)");
+				textArea_Char_Spells.setText("Cantrips\nLevel 1 - (0)\nLevel 2 - (0)\nLevel 3 - (0)\nLevel 4 - (0)\nLevel 5 - (0)\nLevel 6 - (0)\nLevel 7 - (0)\nLevel 8 - (0)\nLevel 9 - (0)");
 				
 				
 				chckbxAlive.setSelected(true);
@@ -2306,6 +2306,7 @@ public class App extends JFrame {
 		}
 		
 		textArea_Char_Notes.setText(character.getNotes()+"");
+		textArea_Char_Spells.setText(character.getSpellsKnown()+"");
 		
 		updateStatMods();
 		
@@ -2442,7 +2443,7 @@ public class App extends JFrame {
 		textField_Char_Class.setText("");
 		textField_Char_Level.setText("");
 		
-		text_Char_Spells.setText("Cantrips\nLevel 1 - (0)\nLevel 2 - (0)\nLevel 3 - (0)\nLevel 4 - (0)\nLevel 5 - (0)\nLevel 6 - (0)\nLevel 7 - (0)\nLevel 8 - (0)\nLevel 9 - (0)");
+		textArea_Char_Spells.setText("Cantrips\nLevel 1 - (0)\nLevel 2 - (0)\nLevel 3 - (0)\nLevel 4 - (0)\nLevel 5 - (0)\nLevel 6 - (0)\nLevel 7 - (0)\nLevel 8 - (0)\nLevel 9 - (0)");
 		
 		
 		chckbxAlive.setSelected(true);
