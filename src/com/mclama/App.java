@@ -139,7 +139,7 @@ public class App extends JFrame {
 	private JTextField textField_Char_Proficiency;
 	private JTextField textField_Settings_Proficiency;
 	private JComboBox comboBox_Character_Campaign;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private final ButtonGroup btnGroup_Char_Alive = new ButtonGroup();
 	private JComboBox comboBox_Towns_Campaign;
 	private JComboBox comboBox_Notes_Campaign;
 	private JComboBox comboBox_Dungeon_Campaign;
@@ -182,6 +182,10 @@ public class App extends JFrame {
 	private Component mntmTownsCreateTown;
 	private boolean canSaveApp = false;
 	private JPanel panel_Towns;
+	private final ButtonGroup btnGroup_Char_Gender = new ButtonGroup();
+	private JCheckBox chckbxMale;
+	private JCheckBox chckbxFemale;
+	private JTextField textField_Notes_Day;
 	
 	
 
@@ -729,9 +733,9 @@ public class App extends JFrame {
 				}
 			}
 		});
-		buttonGroup.add(chckbxAlive);
+		btnGroup_Char_Alive.add(chckbxAlive);
 		chckbxAlive.setSelected(true);
-		chckbxAlive.setBounds(385, 58, 52, 24);
+		chckbxAlive.setBounds(386, 60, 52, 24);
 		panel_Character.add(chckbxAlive);
 		
 //		NumberFormat format = NumberFormat.getInstance();
@@ -810,6 +814,8 @@ public class App extends JFrame {
 		panel_Character.add(textField_Char_ChaMod);
 		
 		textField_Char_Proficiency = new JTextField();
+		textField_Char_Proficiency.setEditable(false);
+		textField_Char_Proficiency.setEnabled(false);
 		textField_Char_Proficiency.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_Char_Proficiency.setColumns(10);
 		textField_Char_Proficiency.setBounds(332, 167, 46, 20);
@@ -831,7 +837,7 @@ public class App extends JFrame {
 				}
 			}
 		});
-		buttonGroup.add(chckbxDead);
+		btnGroup_Char_Alive.add(chckbxDead);
 		chckbxDead.setBounds(457, 58, 54, 24);
 		panel_Character.add(chckbxDead);
 		
@@ -1003,6 +1009,46 @@ public class App extends JFrame {
 		separator_1.setOrientation(SwingConstants.VERTICAL);
 		separator_1.setBounds(257, 98, 9, 88);
 		panel_Character.add(separator_1);
+		
+		chckbxMale = new JCheckBox("Male");
+		chckbxMale.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(!textField_Char_Name.getText().equals("")){
+					character.setGender("Male");
+					
+					if(!character.getName().equals(textField_Char_Name.getText())){
+						character.setName(textField_Char_Name.getText());
+					}
+					
+					character.saveCharacter();
+				}
+			}
+		});
+		btnGroup_Char_Gender.add(chckbxMale);
+		chckbxMale.setBackground(Color.LIGHT_GRAY);
+		chckbxMale.setBounds(386, 96, 52, 24);
+		panel_Character.add(chckbxMale);
+		
+		chckbxFemale = new JCheckBox("Female");
+		chckbxFemale.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(!textField_Char_Name.getText().equals("")){
+					character.setGender("Female");
+					
+					if(!character.getName().equals(textField_Char_Name.getText())){
+						character.setName(textField_Char_Name.getText());
+					}
+					
+					character.saveCharacter();
+				}
+			}
+		});
+		btnGroup_Char_Gender.add(chckbxFemale);
+		chckbxFemale.setBackground(Color.LIGHT_GRAY);
+		chckbxFemale.setBounds(457, 96, 66, 24);
+		panel_Character.add(chckbxFemale);
 		
 		panel_Towns = new JPanel();
 		panel_Towns.setBackground(Color.LIGHT_GRAY);
@@ -1350,15 +1396,7 @@ public class App extends JFrame {
 		textArea_Notes_Notes.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				File file = new File(App.workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Notes.txt");
-				
-				try {
-					PrintWriter out = new PrintWriter(file);
-					out.println(textArea_Notes_Notes.getText().replace("\n", "]]~").replace("\r",""));
-					out.close();
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
+				saveNotes();
 			}
 		});
 		scrollPane_9.setViewportView(textArea_Notes_Notes);
@@ -1374,6 +1412,22 @@ public class App extends JFrame {
 		JMenuItem menuItem_5 = new JMenuItem("Create Town");
 		menuItem_5.setFont(new Font("Dialog", Font.BOLD, 9));
 		popupMenu_2.add(menuItem_5);
+		
+		textField_Notes_Day = new JTextField();
+		textField_Notes_Day.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_Notes_Day.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				saveNotes();
+			}
+		});
+		textField_Notes_Day.setBounds(208, 21, 56, 20);
+		panel_Notes.add(textField_Notes_Day);
+		textField_Notes_Day.setColumns(10);
+		
+		JLabel lblDay = new JLabel("Day");
+		lblDay.setBounds(208, 5, 21, 16);
+		panel_Notes.add(lblDay);
 		
 		JPanel panel_Battle = new JPanel();
 		panel_Battle.setBackground(Color.LIGHT_GRAY);
@@ -1976,6 +2030,47 @@ public class App extends JFrame {
 		
 		//end of frame
 	}
+	
+	private void saveNotes() {
+		File file = new File(App.workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Notes.txt");
+		
+		try {
+			PrintWriter out = new PrintWriter(file);
+			out.println(textArea_Notes_Notes.getText().replace("\n", "]]~").replace("\r",""));
+			out.println("Day:: " + textField_Notes_Day.getText());
+			out.close();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	private void loadNotes(){
+		File file = new File(App.workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Notes.txt");
+		
+		if(file.exists()){
+			try (BufferedReader br = new BufferedReader(new FileReader(file));)
+			{
+				
+				String notes = "";
+				try { notes = br.readLine(); /*first line is notes.*/}catch (Exception e) {}
+
+				if(notes.contains("]]~")) notes = notes.replace("]]~",lSep); //Compatability change
+				else notes = notes.replace("\\n","\n");  //pre-release version
+				
+				textArea_Notes_Notes.setText(notes);
+				
+				try {
+					textField_Notes_Day.setText(br.readLine().split("Day:: ")[1]);
+				} catch (Exception e) {textField_Notes_Day.setText("");}
+				
+				br.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+		}
+	}
 
 
 	protected JTextArea getTextArea() {
@@ -2132,14 +2227,21 @@ public class App extends JFrame {
 		textField_Char_Race.setText(character.getRace()+"");
 		textField_Char_Class.setText(character.getCharClass()+"");
 		textField_Char_Level.setText(character.getLevel()+"");
-		if(character.getAlive().equals("true")) {
+		if (character.getAlive().equals("true")) {
 			chckbxAlive.setSelected(true);
 			chckbxDead.setSelected(false);
-		}
-		else if(character.getAlive().equals("false")) {
+		} else if (character.getAlive().equals("false")) {
 			chckbxDead.setSelected(true);
 			chckbxAlive.setSelected(false);
 		}
+
+		if (character.getGender().equals("Male")) {
+			chckbxMale.setSelected(true);
+			chckbxFemale.setSelected(false);
+		} else if (character.getGender().equals("Female")) {
+			chckbxMale.setSelected(false);
+			chckbxFemale.setSelected(true);
+		} else btnGroup_Char_Gender.clearSelection();
 		
 		textArea_Char_Notes.setText(character.getNotes()+"");
 		textArea_Char_Spells.setText(character.getSpellsKnown()+"");
@@ -2478,28 +2580,7 @@ public class App extends JFrame {
 		updateTownsList();
 		
 		
-		//load campaign notes
-		File file = new File(App.workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Notes.txt");
-		
-		if(file.exists()){
-			try (BufferedReader br = new BufferedReader(new FileReader(file));)
-			{
-				
-				String notes = "";
-				try { notes = br.readLine(); /*first line is notes.*/}catch (Exception e) {}
-
-				if(notes.contains("]]~")) notes = notes.replace("]]~",lSep); //Compatability change
-				else notes = notes.replace("\\n","\n");  //pre-release version
-				
-				textArea_Notes_Notes.setText(notes);
-				
-				br.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}	
-		}
+		loadNotes();
 		
 		if(save) {
 			saveAppSettings();
