@@ -1,5 +1,12 @@
 package com.mclama;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -13,6 +20,86 @@ public class Encounter {
 	public Encounter(App app){
 		this.app = app;
 	}
+	
+	public void loadEncounter(String campaign, JTable table_Battle, JList list_Battle_Dead){
+		File ceDir = new File(App.workDir + App.fSep + "Campaigns" + App.fSep + campaign + App.fSep + "Encounter.txt");
+		
+		if(ceDir.exists())
+		{
+			try (BufferedReader br = new BufferedReader(new FileReader(ceDir));)
+			{
+				String line;
+				String[] xspl;
+				String[] subStr;
+				
+				try {
+					System.out.println("load turns");
+					line = br.readLine().split("Turns:: ")[1];
+					DefaultTableModel model = (DefaultTableModel) table_Battle.getModel();
+					xspl = line.split("]]~");
+					for(int i = 0; i<xspl.length; i++){
+						subStr = xspl[i].split("\\[~");
+						model.addRow(new Object[]{ subStr[0], subStr[1], subStr[2], null });
+					}
+				} catch (Exception e1) { }
+				
+				try {
+					line = br.readLine().split("Dead:: ")[1]; 
+					SortedListModel model = new SortedListModel();
+					xspl = line.split(":;");
+					for(int i = 0; i<xspl.length; i++){
+						model.add(xspl[i]);
+					}
+					list_Battle_Dead.setModel(model);
+				} catch (Exception e) { list_Battle_Dead.setModel(new SortedListModel()); }
+				
+				
+				
+				
+				
+				br.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void saveEncounter(String campaign, JTable table_Battle, JList list_Battle_Dead){
+		if(table_Battle.getModel().getRowCount() >0 || list_Battle_Dead.getModel().getSize() >0)
+		{
+			File ceDir = new File(App.workDir + App.fSep + "Campaigns" + App.fSep + campaign + App.fSep + "Encounter.txt");
+			// Campaigns/Encounter.txt
+			try 
+			{
+				PrintWriter out = new PrintWriter(ceDir);
+				
+				String turnStr = "";
+				for(int i = 0; i < table_Battle.getModel().getRowCount(); i++){
+					turnStr += table_Battle.getModel().getValueAt(i, 0) + "[~";
+					turnStr += table_Battle.getModel().getValueAt(i, 1) + "[~";
+					turnStr += table_Battle.getModel().getValueAt(i, 2) + "]]~";
+				}
+				
+				String deadStr = "";
+				for(int i = 0; i < list_Battle_Dead.getModel().getSize(); i++){
+					deadStr += list_Battle_Dead.getModel().getElementAt(i) + ":;";
+				}
+				
+				out.println("Turns:: " + turnStr);
+				out.println("Dead:: " + deadStr);
+				
+				
+				
+				out.close(); //finished writing
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	
 	public void moveCreature(JTable table_Battle, int move) {
 		TableModel model = table_Battle.getModel();

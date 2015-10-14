@@ -1497,6 +1497,7 @@ public class App extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				encounter.selectedBattleDeath(table_Battle, list_Battle_Dead);
+				encounter.saveEncounter(campaign.getName(), table_Battle, list_Battle_Dead);
 			}
 		});
 		btnDie.setBounds(509, 78, 51, 26);
@@ -2402,6 +2403,7 @@ public class App extends JFrame {
 		
 		settings.loadSettings(line);
 		loadCampaignSettings();
+		encounter.loadEncounter(line, table_Battle, list_Battle_Dead);
 		
 		charList = (ArrayList<String>) campaign.getCharacters().clone();
 		list_Characters.removeAll();
