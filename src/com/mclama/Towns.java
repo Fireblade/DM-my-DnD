@@ -32,11 +32,14 @@ public class Towns {
 				
 				br.readLine(); //ignore this line, we already know the name.
 				
-				try { townSize = br.readLine().split("Size:: ")[1]; } catch (Exception e) {/*e.printStackTrace();*/}
+				try { townSize = br.readLine().split("Size:: ")[1]; } catch (Exception e) {}
 				
-				try { tNote = br.readLine().split("Notes:: ")[1]; 
-					tNote = tNote.replace("\\n","\n");
-				} catch (Exception e) {/*e.printStackTrace();*/}
+				try { tNote = br.readLine().split("Notes:: ")[1];
+				} catch (Exception e) {}
+				
+
+				if(tNote.contains("]]~")) tNote = tNote.replace("]]~","\n");
+				else tNote = tNote.replace("\\n","\n"); //pre-release version
 				
 				
 				
@@ -70,7 +73,7 @@ public class Towns {
 				
 				out.println("Name:: " + name);
 				out.println("Size:: " + townSize);
-				out.println("Notes:: " + tNote.replace("\n", "\\n").replace("\r",""));
+				out.println("Notes:: " + tNote.replace("\n", "]]~").replace("\r",""));
 				
 				
 				

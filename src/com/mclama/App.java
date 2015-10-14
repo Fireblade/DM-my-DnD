@@ -83,6 +83,9 @@ import javax.swing.table.TableModel;
 
 public class App extends JFrame {
 	
+	public static int buildn = 1; //build number
+	public static String version = "v1.0.0";
+	
 	private static long PRESSED_ENTER=0;
 	private static String lastKnownCharacterName = "";
 	private static String lastKnownCampaignName = "";
@@ -1321,37 +1324,6 @@ public class App extends JFrame {
 		});
 		scrollPane_9.setViewportView(textArea_Notes_Notes);
 		
-		JPanel panel_Dungeon = new JPanel();
-		panel_Dungeon.setBackground(Color.LIGHT_GRAY);
-		panel_Dungeon.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				globalMousePressed(e);
-			}
-		});
-		tabbedPane.addTab("Dungeon", null, panel_Dungeon, null);
-		panel_Dungeon.setLayout(null);
-		
-		JLabel label_8 = new JLabel("For Campaign:");
-		label_8.setBounds(0, 0, 99, 16);
-		panel_Dungeon.add(label_8);
-		
-		comboBox_Dungeon_Campaign = new JComboBox();
-		comboBox_Dungeon_Campaign.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(e.ACTION_PERFORMED==1001){ //pressed enter
-					if(!comboBox_Dungeon_Campaign.getSelectedItem().toString().equals(lastKnownCampaignName)){
-						String campaignName = comboBox_Dungeon_Campaign.getSelectedItem().toString();
-						campaignChange(campaignName);
-					}
-				}
-			}
-		});
-		comboBox_Dungeon_Campaign.setEditable(true);
-		comboBox_Dungeon_Campaign.setBounds(0, 16, 196, 25);
-		panel_Dungeon.add(comboBox_Dungeon_Campaign);
-		
 		JPanel panel_Battle = new JPanel();
 		panel_Battle.setBackground(Color.LIGHT_GRAY);
 		tabbedPane.addTab("Battle", null, panel_Battle, null);
@@ -1571,103 +1543,6 @@ public class App extends JFrame {
 		lblOr.setBounds(548, 173, 160, 16);
 		panel_Battle.add(lblOr);
 		
-		panel_Misc = new JPanel();
-		panel_Misc.setBackground(Color.LIGHT_GRAY);
-		tabbedPane.addTab("Misc", null, panel_Misc, null);
-		panel_Misc.setLayout(null);
-		
-		textField = new JTextField();
-		textField.setBounds(12, 36, 196, 20);
-		panel_Misc.add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblChracterName = new JLabel("Chracter Name");
-		lblChracterName.setBounds(12, 23, 97, 14);
-		panel_Misc.add(lblChracterName);
-		
-		JButton btnRollNameMisc = new JButton("Roll Name");
-		btnRollNameMisc.setBounds(99, 12, 108, 23);
-		panel_Misc.add(btnRollNameMisc);
-		
-		txtStatstr = new JTextField();
-		txtStatstr.setBounds(219, 82, 114, 20);
-		panel_Misc.add(txtStatstr);
-		txtStatstr.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStatstr.setColumns(10);
-		
-		JLabel lblStrength = new JLabel("Strength");
-		lblStrength.setBounds(219, 68, 55, 16);
-		panel_Misc.add(lblStrength);
-		
-		JLabel lblDexterity = new JLabel("Dexterity");
-		lblDexterity.setBounds(219, 114, 55, 16);
-		panel_Misc.add(lblDexterity);
-		
-		txtStatDex = new JTextField();
-		txtStatDex.setBounds(219, 128, 114, 20);
-		panel_Misc.add(txtStatDex);
-		txtStatDex.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStatDex.setColumns(10);
-		
-		JLabel lblCon = new JLabel("Constitution");
-		lblCon.setBounds(219, 160, 68, 16);
-		panel_Misc.add(lblCon);
-		
-		txtStatCon = new JTextField();
-		txtStatCon.setBounds(219, 174, 114, 20);
-		panel_Misc.add(txtStatCon);
-		txtStatCon.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStatCon.setColumns(10);
-		
-		JLabel lblIntelligence = new JLabel("Intelligence");
-		lblIntelligence.setBounds(219, 206, 68, 16);
-		panel_Misc.add(lblIntelligence);
-		
-		txtStatInt = new JTextField();
-		txtStatInt.setBounds(219, 220, 114, 20);
-		panel_Misc.add(txtStatInt);
-		txtStatInt.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStatInt.setColumns(10);
-		
-		JLabel lblWisdom = new JLabel("Wisdom");
-		lblWisdom.setBounds(219, 252, 55, 16);
-		panel_Misc.add(lblWisdom);
-		
-		txtStatWis = new JTextField();
-		txtStatWis.setBounds(219, 266, 114, 20);
-		panel_Misc.add(txtStatWis);
-		txtStatWis.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStatWis.setColumns(10);
-		
-		JLabel lblCharisma = new JLabel("Charisma");
-		lblCharisma.setBounds(219, 298, 55, 16);
-		panel_Misc.add(lblCharisma);
-		
-		txtStatCha = new JTextField();
-		txtStatCha.setBounds(219, 312, 114, 20);
-		panel_Misc.add(txtStatCha);
-		txtStatCha.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStatCha.setColumns(10);
-		
-		txtChardiceroll = new JTextField();
-		txtChardiceroll.setBounds(220, 36, 114, 20);
-		panel_Misc.add(txtChardiceroll);
-		txtChardiceroll.setHorizontalAlignment(SwingConstants.CENTER);
-		txtChardiceroll.setText("4d6dl1");
-		txtChardiceroll.setColumns(10);
-		
-		JLabel lblDiceRoll = new JLabel("Dice Roll");
-		lblDiceRoll.setBounds(226, 22, 55, 16);
-		panel_Misc.add(lblDiceRoll);
-		btnRollNameMisc.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String text=getNewCharacterName();
-				
-				textField.setText(text);
-			}
-		});
-		
 		JPanel panel_Settings = new JPanel();
 		panel_Settings.setBackground(Color.LIGHT_GRAY);
 		panel_Settings.addMouseListener(new MouseAdapter() {
@@ -1825,6 +1700,136 @@ public class App extends JFrame {
 		txtrYouCanMake.setText("You can make rolls!\r\nd6 - rolls a normal 6 sided die.\r\n2d6 - rolls 2 normal 6 sided die.\r\n2d6d1 - rolls 2 dice, but drops the lowest 1 results.\r\n2d6dl1 - rolls 2 dice, but drops the lowest 1 results.\r\n3d6+6 - rolls 3 dice, but adds 6 at the end. (3,3,1 = 7, +6 = 13)\r\n3d6-3 - rolls 3 dice, but subtracts 3 at the end. (1,1,1 = 3, -3 = 0)\r\n\r\n\r\n\r\nd4, d6, d8, d10, d12, d20, d100. They all work!\r\n\r\n\r\nCurrently not available>\r\n2d6kh1 - rolls 2 dice, but keeps the highest 1 results.\r\n3d6kl1 - rolls 3 dice, but keeps the lowest 1 results.\r\n");
 		txtrYouCanMake.setBounds(12, 12, 668, 381);
 		panel_Info.add(txtrYouCanMake);
+		
+		JPanel panel_Dungeon = new JPanel();
+		panel_Dungeon.setBackground(Color.LIGHT_GRAY);
+		panel_Dungeon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				globalMousePressed(e);
+			}
+		});
+		tabbedPane.addTab("Dungeon", null, panel_Dungeon, null);
+		tabbedPane.setEnabledAt(6, false);
+		panel_Dungeon.setLayout(null);
+		
+		JLabel label_8 = new JLabel("For Campaign:");
+		label_8.setBounds(0, 0, 99, 16);
+		panel_Dungeon.add(label_8);
+		
+		comboBox_Dungeon_Campaign = new JComboBox();
+		comboBox_Dungeon_Campaign.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.ACTION_PERFORMED==1001){ //pressed enter
+					if(!comboBox_Dungeon_Campaign.getSelectedItem().toString().equals(lastKnownCampaignName)){
+						String campaignName = comboBox_Dungeon_Campaign.getSelectedItem().toString();
+						campaignChange(campaignName);
+					}
+				}
+			}
+		});
+		comboBox_Dungeon_Campaign.setEditable(true);
+		comboBox_Dungeon_Campaign.setBounds(0, 16, 196, 25);
+		panel_Dungeon.add(comboBox_Dungeon_Campaign);
+		
+		panel_Misc = new JPanel();
+		panel_Misc.setBackground(Color.LIGHT_GRAY);
+		tabbedPane.addTab("Misc", null, panel_Misc, null);
+		tabbedPane.setEnabledAt(7, false);
+		panel_Misc.setLayout(null);
+		
+		textField = new JTextField();
+		textField.setBounds(12, 36, 196, 20);
+		panel_Misc.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblChracterName = new JLabel("Chracter Name");
+		lblChracterName.setBounds(12, 23, 97, 14);
+		panel_Misc.add(lblChracterName);
+		
+		JButton btnRollNameMisc = new JButton("Roll Name");
+		btnRollNameMisc.setBounds(99, 12, 108, 23);
+		panel_Misc.add(btnRollNameMisc);
+		
+		txtStatstr = new JTextField();
+		txtStatstr.setBounds(219, 82, 114, 20);
+		panel_Misc.add(txtStatstr);
+		txtStatstr.setHorizontalAlignment(SwingConstants.CENTER);
+		txtStatstr.setColumns(10);
+		
+		JLabel lblStrength = new JLabel("Strength");
+		lblStrength.setBounds(219, 68, 55, 16);
+		panel_Misc.add(lblStrength);
+		
+		JLabel lblDexterity = new JLabel("Dexterity");
+		lblDexterity.setBounds(219, 114, 55, 16);
+		panel_Misc.add(lblDexterity);
+		
+		txtStatDex = new JTextField();
+		txtStatDex.setBounds(219, 128, 114, 20);
+		panel_Misc.add(txtStatDex);
+		txtStatDex.setHorizontalAlignment(SwingConstants.CENTER);
+		txtStatDex.setColumns(10);
+		
+		JLabel lblCon = new JLabel("Constitution");
+		lblCon.setBounds(219, 160, 68, 16);
+		panel_Misc.add(lblCon);
+		
+		txtStatCon = new JTextField();
+		txtStatCon.setBounds(219, 174, 114, 20);
+		panel_Misc.add(txtStatCon);
+		txtStatCon.setHorizontalAlignment(SwingConstants.CENTER);
+		txtStatCon.setColumns(10);
+		
+		JLabel lblIntelligence = new JLabel("Intelligence");
+		lblIntelligence.setBounds(219, 206, 68, 16);
+		panel_Misc.add(lblIntelligence);
+		
+		txtStatInt = new JTextField();
+		txtStatInt.setBounds(219, 220, 114, 20);
+		panel_Misc.add(txtStatInt);
+		txtStatInt.setHorizontalAlignment(SwingConstants.CENTER);
+		txtStatInt.setColumns(10);
+		
+		JLabel lblWisdom = new JLabel("Wisdom");
+		lblWisdom.setBounds(219, 252, 55, 16);
+		panel_Misc.add(lblWisdom);
+		
+		txtStatWis = new JTextField();
+		txtStatWis.setBounds(219, 266, 114, 20);
+		panel_Misc.add(txtStatWis);
+		txtStatWis.setHorizontalAlignment(SwingConstants.CENTER);
+		txtStatWis.setColumns(10);
+		
+		JLabel lblCharisma = new JLabel("Charisma");
+		lblCharisma.setBounds(219, 298, 55, 16);
+		panel_Misc.add(lblCharisma);
+		
+		txtStatCha = new JTextField();
+		txtStatCha.setBounds(219, 312, 114, 20);
+		panel_Misc.add(txtStatCha);
+		txtStatCha.setHorizontalAlignment(SwingConstants.CENTER);
+		txtStatCha.setColumns(10);
+		
+		txtChardiceroll = new JTextField();
+		txtChardiceroll.setBounds(220, 36, 114, 20);
+		panel_Misc.add(txtChardiceroll);
+		txtChardiceroll.setHorizontalAlignment(SwingConstants.CENTER);
+		txtChardiceroll.setText("4d6dl1");
+		txtChardiceroll.setColumns(10);
+		
+		JLabel lblDiceRoll = new JLabel("Dice Roll");
+		lblDiceRoll.setBounds(226, 22, 55, 16);
+		panel_Misc.add(lblDiceRoll);
+		btnRollNameMisc.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String text=getNewCharacterName();
+				
+				textField.setText(text);
+			}
+		});
 		
 		
 		
@@ -2639,15 +2644,9 @@ public class App extends JFrame {
 				
 				String notes = "";
 				try { notes = br.readLine(); /*first line is notes.*/}catch (Exception e) {}
-//				try 
-//				{ 
-//					notes = br.readLine(); //first line is notes.
-//					notes = notes.replace("\\n","\n");
-//				} catch (Exception e) {/*e.printStackTrace();*/}
-				
-				if(notes.contains("\\n")) notes = notes.replace("\\n","\n");
-				else notes = notes.replace("]]~",System.getProperty("line.separator"));
-				
+
+				if(notes.contains("]]~")) notes = notes.replace("]]~",lSep); //Compatability change
+				else notes = notes.replace("\\n","\n");  //pre-release version
 				
 				textArea_Notes_Notes.setText(notes);
 				

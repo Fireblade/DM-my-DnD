@@ -63,85 +63,65 @@ public class Character {
 				
 				try {
 					town = br.readLine().split("Town:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					job = br.readLine().split("Job:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					race = br.readLine().split("Race:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					charClass = br.readLine().split("Class:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					level = Integer.parseInt(br.readLine().split("Level:: ")[1]);
-				} catch (NumberFormatException e) {
-					//e.printStackTrace();
-				}
+				} catch (NumberFormatException e) {}
+				
 				try {
 					alive = br.readLine().split("Alive:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
 				
 				try {
 					reserved1 = br.readLine().split("Reserved1:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					reserved2 = br.readLine().split("Reserved2:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					reserved3 = br.readLine().split("Reserved3:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					reserved4 = br.readLine().split("Reserved4:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					reserved5 = br.readLine().split("Reserved5:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
+				
 				try {
 					reserved6 = br.readLine().split("Reserved6:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+				} catch (Exception e) {}
 				
 				try {
 					spellsKnown = br.readLine().split("Spells Known:: ")[1];
-					spellsKnown = spellsKnown.replace("\\n","\n");
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
-				try {
-					spellSlots = br.readLine().split("Spell Slots:: ")[1];
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+					if(spellsKnown.contains("]]~")) spellsKnown = spellsKnown.replace("]]~","\n"); 
+					else spellsKnown = spellsKnown.replace("\\n","\n"); //pre-release version
+				} catch (Exception e) {}
+				
+				try { spellSlots = br.readLine().split("Spell Slots:: ")[1]; /*OBSOLETE*/ } catch (Exception e) {}
 				
 				try {
 					notes = br.readLine().split("Notes:: ")[1];
-					//notes = notes.replace("\\n",System.getProperty("line.separator"));
-					notes = notes.replace("\\n","\n");
-				} catch (Exception e) {
-					//e.printStackTrace();
-				}
+					if(notes.contains("]]~")) notes = notes.replace("]]~","\n"); 
+					else notes = notes.replace("\\n","\n"); //pre-release version
+				} catch (Exception e) {}
 				
 				br.close();
 				
@@ -214,9 +194,9 @@ public class Character {
 					out.println("Reserved5:: " + reserved5);
 					out.println("Reserved6:: " + reserved6);
 					
-					out.println("Spells Known:: " + spellsKnown.replace("\r","").replace("\n", "\\n"));
-					out.println("Spell Slots:: " + spellSlots);
-					out.println("Notes:: " + notes.replace("\n", "\\n").replace("\r",""));
+					out.println("Spells Known:: " + spellsKnown.replace("\r","").replace("\n", "]]~"));
+					out.println("Spell Slots:: ");
+					out.println("Notes:: " + notes.replace("\n", "]]~").replace("\r",""));
 					
 					
 					out.close(); //finished writing
