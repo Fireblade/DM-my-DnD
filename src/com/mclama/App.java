@@ -179,6 +179,7 @@ public class App extends JFrame {
 	private JList list_Battle_Dead;
 	private JCheckBox chckbxKeepname;
 	private Component mntmTownsCreateTown;
+	private boolean canSaveApp = false;
 	
 
 	/**
@@ -1869,7 +1870,7 @@ public class App extends JFrame {
 					if(subDir.length==0){
 						comboBox_Character_Campaign.addItem("");
 					}
-					
+					System.out.println("Getting campaign list...");
 					for(String dir : subDir)
 					{
 					    if (new File(workDir + fSep + "Campaigns" + fSep + dir).isDirectory())
@@ -1879,32 +1880,38 @@ public class App extends JFrame {
 					        lastKnownCampaignName = dir;
 					    }
 					}
-					
+					System.out.println("Getting campaign Settings file...");
 					//get settings file for last used campaign
 					if(new File(workDir + fSep + "Settings.txt").exists()){
-						System.out.println(new File(workDir + fSep + "Settings.txt"));
 						try (
 							    BufferedReader br = new BufferedReader(new FileReader( new File(workDir + fSep + "Settings.txt")));
 						){
-							String line;
+							String line = "";
 							String[] str;
 							
-							line = br.readLine(); //version of save file;
-							line = br.readLine(); //last known campaign name.
-							str = line.split(":: ");
-							setCampaignTo(str[1], false);
-							lastKnownCampaignName = str[1];
+							try {line = br.readLine();} catch (Exception e) {} //version of save file;
+							try {line = br.readLine();} catch (Exception e) {} //last known campaign name.
+							if(line.length() > 0){
+								str = line.split(":: ");
+								System.out.println("loading settings: " + str[1]);
+								setCampaignTo(str[1], false);
+								lastKnownCampaignName = str[1];
+							}
 							
 							br.close();
 						} catch (FileNotFoundException e1) {
-							System.out.println("Couln't find settings file " + new File(workDir + fSep + "Settings.txt") + "");
+							System.out.println("Couln't find settings file " + new File(workDir + fSep + "Settings.txt") + " Now saving.");
+							//saveAppSettings();
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
+						catch (Exception e) {e.printStackTrace();}
 					}
-					
+					else setCampaignTo(lastKnownCampaignName, false); //if we don't find settings file
 					
 				}
+				canSaveApp = true;
+				System.out.println("Done initial loading.");
 //				charList = (ArrayList<String>) campaign.getCharacters().clone();
 //				list_Characters.removeAll();
 //				updateCharacterList();
@@ -2581,16 +2588,13 @@ public class App extends JFrame {
 	}
 
 	protected void campaignChange(String campaignName) {
-		System.out.println("CAMPAIGN CHANGE: " + lastKnownCampaignName + " to " + campaignName);
-		lastKnownCampaignName = campaignName;
-		
-		
 		File newFolder = new File(workDir + fSep + "Campaigns" + fSep + campaignName);
 		if(newFolder.exists()){
-			setCampaignTo(campaignName); //if exists, go to it
+			setCampaignTo(campaignName, false); //if exists, go to it
+			System.out.println("Found campaign: " + campaignName);
 		} else if(newFolder.mkdirs()){   //else we need to create the campaign
 			createNewCampaign(campaignName);
-			setCampaignTo(campaignName);
+			setCampaignTo(campaignName, false);
 			System.out.println("Created campaign: " + campaignName);
 		} else {System.out.println("Failed to create directory at " + newFolder);}
 	}
@@ -2601,10 +2605,6 @@ public class App extends JFrame {
 		comboBox_Notes_Campaign.addItem(campaignName);
 		comboBox_Dungeon_Campaign.addItem(campaignName);
 		comboBox_Settings_Campaign.addItem(campaignName);
-	}
-	
-	private void setCampaignTo(String line){
-		setCampaignTo(line, false);
 	}
 
 	private void setCampaignTo(String line, boolean save) {
@@ -2649,8 +2649,13 @@ public class App extends JFrame {
 			}
 		}
 		
-		campaign = new Campaign(this, line);
 		lastKnownCampaignName = line;
+		campaign = new Campaign(this, line);
+		
+		//System.out.println("CAMPAIGN CHANGE: " + lastKnownCampaignName + " to " + line);
+		//lastKnownCampaignName = line;
+		
+		
 		settings.loadSettings(line);
 		loadCampaignSettings();
 		
@@ -2662,6 +2667,8 @@ public class App extends JFrame {
 		list_Towns_Towns.removeAll();
 		updateTownsList();
 		
+		
+		//load campaign notes
 		File file = new File(App.workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Notes.txt");
 		
 		if(file.exists()){
@@ -2681,14 +2688,40 @@ public class App extends JFrame {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			
-			
-			
+			}	
 		}
-		if(save) settings.saveSettings();
+		
+		if(save) {
+			saveAppSettings();
+			//settings.saveSettings();
+		}
 		
 	}
+
+	private void saveAppSettings() {
+		if(canSaveApp){
+			System.out.println("Saving App Settings...");
+			File appSettings = new File(workDir + fSep + "Settings.txt");
+			
+			//if(appSettings.exists())
+			{
+				try
+				{
+					PrintWriter out = new PrintWriter(appSettings);
+					
+					out.println("txt:: 1"); //misc random number for future
+					out.println("Campaign:: " + lastKnownCampaignName);
+					
+					
+					out.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+	}
+
 
 	private void loadCampaignSettings() {
 		textField_Settings_Proficiency.setText(settings.getProficiency());
