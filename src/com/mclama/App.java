@@ -181,6 +181,7 @@ public class App extends JFrame {
 	protected JCheckBox chckbxKeepname;
 	private Component mntmTownsCreateTown;
 	private boolean canSaveApp = false;
+	private JPanel panel_Towns;
 	
 	
 
@@ -298,15 +299,29 @@ public class App extends JFrame {
 					
 					if(townChar != null)
 					{
-						if(list_Characters.getSelectedValue().toString().equals(townChar.getName()))
-						{
-							textArea_Towns_CharNotes.setText(textArea_Char_Notes.getText());
-						}
+						try {
+							if(list_Characters.getSelectedValue().toString().equals(townChar.getName()))
+							{
+								textArea_Towns_CharNotes.setText(textArea_Char_Notes.getText());
+							}
+						} catch (Exception e1) {}
 					}
 				}
 			}
 		});
 		scrollPane.setViewportView(textArea_Char_Notes);
+		
+		JPopupMenu popupMenu_1 = new JPopupMenu();
+		popupMenu_1.setFont(new Font("Dialog", Font.BOLD, 9));
+		addPopup(textArea_Char_Notes, popupMenu_1);
+		
+		JMenuItem menuItem_2 = new JMenuItem("Create Character");
+		menuItem_2.setFont(new Font("Dialog", Font.BOLD, 9));
+		popupMenu_1.add(menuItem_2);
+		
+		JMenuItem menuItem_3 = new JMenuItem("Create Town");
+		menuItem_3.setFont(new Font("Dialog", Font.BOLD, 9));
+		popupMenu_1.add(menuItem_3);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(545, 199, 144, 196);
@@ -989,7 +1004,7 @@ public class App extends JFrame {
 		separator_1.setBounds(257, 98, 9, 88);
 		panel_Character.add(separator_1);
 		
-		JPanel panel_Towns = new JPanel();
+		panel_Towns = new JPanel();
 		panel_Towns.setBackground(Color.LIGHT_GRAY);
 		panel_Towns.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1036,14 +1051,28 @@ public class App extends JFrame {
 					townChar.setNotes(textArea_Towns_CharNotes.getText());
 					townChar.saveCharacter();
 					
-					if(list_Characters.getSelectedValue().toString().equals(townChar.getName()))
-					{
-						textArea_Char_Notes.setText(textArea_Towns_CharNotes.getText());
-					}
+					try {
+						if(list_Characters.getSelectedValue().toString().equals(townChar.getName()))
+						{
+							textArea_Char_Notes.setText(textArea_Towns_CharNotes.getText());
+						}
+					} catch (Exception e1) {}
 				}
 			}
 		});
 		scrollPane_6.setViewportView(textArea_Towns_CharNotes);
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.setFont(new Font("Dialog", Font.BOLD, 9));
+		addPopup(textArea_Towns_CharNotes, popupMenu);
+		
+		JMenuItem menuItem = new JMenuItem("Create Character");
+		menuItem.setFont(new Font("Dialog", Font.BOLD, 9));
+		popupMenu.add(menuItem);
+		
+		JMenuItem menuItem_1 = new JMenuItem("Create Town");
+		menuItem_1.setFont(new Font("Dialog", Font.BOLD, 9));
+		popupMenu.add(menuItem_1);
 		
 		JLabel lblTownFilter = new JLabel("Town Filter");
 		lblTownFilter.setBounds(545, 0, 88, 16);
@@ -1115,8 +1144,11 @@ public class App extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Create Character Pop");
-				createNewCharacter(textArea_Towns_Notes.getSelectedText());
-				tabbedPane.setSelectedComponent(panel_Character);
+				JTextArea txtArea = getTextArea();
+				if(txtArea.getSelectedText() != null){
+					createNewCharacter(txtArea.getSelectedText().replace("\n"," "));
+					tabbedPane.setSelectedComponent(panel_Character);
+				}
 			}
 		});
 		
@@ -1128,24 +1160,27 @@ public class App extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Create Town Pop");
-				
-				lastKnownTownName = textArea_Towns_Notes.getSelectedText();
-				
-				town = new Towns(App.this);
-				
-				textField_Towns_Name.setText(textArea_Towns_Notes.getSelectedText());
-				textField_Towns_TownFilter.setText("");
-				textField_Towns_CharFilter.setText("");
-				textField_Towns_Size.setText("");
-				textArea_Towns_Notes.setText("");
-				textArea_Towns_CharNotes.setText("");
-				updateTownsCharList("");
-				
-				town.setName(textArea_Towns_Notes.getSelectedText());
-				town.saveTown();
+				if(textArea_Towns_Notes.getSelectedText() != null){
+					lastKnownTownName = textArea_Towns_Notes.getSelectedText();
+					
+					town = new Towns(App.this);
+					
+					textField_Towns_Name.setText(textArea_Towns_Notes.getSelectedText());
+					textField_Towns_TownFilter.setText("");
+					textField_Towns_CharFilter.setText("");
+					textField_Towns_Size.setText("");
+					textArea_Towns_Notes.setText("");
+					textArea_Towns_CharNotes.setText("");
+					updateTownsCharList("");
+					
+					town.setName(textArea_Towns_Notes.getSelectedText());
+					town.saveTown();
+					
+					tabbedPane.setSelectedComponent(panel_Towns);
+				}
 			}
 		});
-		mntmCreateTown.setFont(new Font("Dialog", Font.BOLD, 10));
+		mntmCreateTown.setFont(new Font("Dialog", Font.BOLD, 9));
 		popupMenu_Towns.add(mntmCreateTown);
 		
 		JLabel lblTownNotes = new JLabel("Town Notes:");
@@ -1327,6 +1362,18 @@ public class App extends JFrame {
 			}
 		});
 		scrollPane_9.setViewportView(textArea_Notes_Notes);
+		
+		JPopupMenu popupMenu_2 = new JPopupMenu();
+		popupMenu_2.setFont(new Font("Dialog", Font.BOLD, 9));
+		addPopup(textArea_Notes_Notes, popupMenu_2);
+		
+		JMenuItem menuItem_4 = new JMenuItem("Create Character");
+		menuItem_4.setFont(new Font("Dialog", Font.BOLD, 9));
+		popupMenu_2.add(menuItem_4);
+		
+		JMenuItem menuItem_5 = new JMenuItem("Create Town");
+		menuItem_5.setFont(new Font("Dialog", Font.BOLD, 9));
+		popupMenu_2.add(menuItem_5);
 		
 		JPanel panel_Battle = new JPanel();
 		panel_Battle.setBackground(Color.LIGHT_GRAY);
@@ -1928,6 +1975,23 @@ public class App extends JFrame {
 		updater.start();
 		
 		//end of frame
+	}
+
+
+	protected JTextArea getTextArea() {
+		if(textArea_Towns_Notes.getSelectedText() != null){
+			return textArea_Towns_Notes;
+		}
+		if(textArea_Notes_Notes.getSelectedText() != null){
+			return textArea_Notes_Notes;
+		}
+		if(textArea_Towns_CharNotes.getSelectedText() != null){
+			return textArea_Towns_CharNotes;
+		}
+		if(textArea_Char_Notes.getSelectedText() != null){
+			return textArea_Char_Notes;
+		}
+		return null;
 	}
 
 
