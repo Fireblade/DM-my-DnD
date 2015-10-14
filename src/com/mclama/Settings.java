@@ -44,6 +44,8 @@ public class Settings {
 				
 				out.println("Class List:: " + classStr);
 				out.println("Race List:: " + raceStr);
+				out.println("DefaultCharRoll:: " + defaultCharRoll);
+				out.println("Proficiency:: " + proficiency);
 				
 				
 				out.close(); //finished writing
@@ -79,6 +81,9 @@ public class Settings {
 				}
 				app.list_Settings_Race.setModel(model);
 				
+				try { defaultCharRoll = br.readLine().split("DefaultCharRoll:: ")[1]; } catch (Exception e) {}
+				try { proficiency = br.readLine().split("Proficiency:: ")[1]; } catch (Exception e) {}
+				
 				
 				br.close();
 			} catch (FileNotFoundException e) {
@@ -87,6 +92,38 @@ public class Settings {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public String getProficiency() {
+		return proficiency;
+	}
+
+	public void setProficiency(String proficiency) {
+		this.proficiency = proficiency;
+	}
+
+	public String getDefaultCharRoll() {
+		return defaultCharRoll;
+	}
+
+	public void setDefaultCharRoll(String defaultCharRoll) {
+		this.defaultCharRoll = defaultCharRoll;
+	}
+
+	public ListModel getClassList() {
+		return classList;
+	}
+
+	public void setClassList(ListModel classList) {
+		this.classList = classList;
+	}
+
+	public ListModel getRaceList() {
+		return raceList;
+	}
+
+	public void setRaceList(ListModel raceList) {
+		this.raceList = raceList;
 	}
 
 }

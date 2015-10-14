@@ -83,7 +83,7 @@ import javax.swing.table.TableModel;
 
 public class App extends JFrame {
 	
-	public static int buildn = 1; //build number
+	public static int buildn = 1; //build number, I will usually increase this when something needs to know when it can work.
 	public static String version = "v1.0.0";
 	
 	private static long PRESSED_ENTER=0;
@@ -122,7 +122,7 @@ public class App extends JFrame {
 	private JTextField textField_Char_Int;
 	private JTextField textField_Char_Wis;
 	private JTextField textField_Char_Cha;
-	private JTextField txt_Char_DiceRoll;
+	private JTextField textField_Char_DiceRoll;
 	private JTextField textField_Char_Filter;
 	private JTextField textField_Char_Town;
 	private JTextField textField_Char_Job;
@@ -145,7 +145,7 @@ public class App extends JFrame {
 	private JComboBox comboBox_Settings_Campaign;
 	private JTextArea textArea_Char_Notes;
 	private JCheckBox chckbxAlive;
-	private JTextField txtd;
+	private JTextField textField_Settings_CharRoll;
 	private JList list_Characters;
 	private JTextArea textArea_Char_Spells;
 	private JCheckBox chckbxDead;
@@ -530,12 +530,12 @@ public class App extends JFrame {
 		textField_Char_Cha.setBounds(138, 167, 55, 20);
 		panel_Character.add(textField_Char_Cha);
 		
-		txt_Char_DiceRoll = new JTextField();
-		txt_Char_DiceRoll.setText("3d6");
-		txt_Char_DiceRoll.setHorizontalAlignment(SwingConstants.CENTER);
-		txt_Char_DiceRoll.setColumns(10);
-		txt_Char_DiceRoll.setBounds(198, 21, 93, 20);
-		panel_Character.add(txt_Char_DiceRoll);
+		textField_Char_DiceRoll = new JTextField();
+		textField_Char_DiceRoll.setText("3d6");
+		textField_Char_DiceRoll.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_Char_DiceRoll.setColumns(10);
+		textField_Char_DiceRoll.setBounds(198, 21, 93, 20);
+		panel_Character.add(textField_Char_DiceRoll);
 		
 		JLabel label_6 = new JLabel("Dice Roll");
 		label_6.setBounds(204, 7, 55, 16);
@@ -1575,6 +1575,13 @@ public class App extends JFrame {
 		panel_Settings.add(lblForCampaign);
 		
 		textField_Settings_Proficiency = new JTextField();
+		textField_Settings_Proficiency.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				settings.setProficiency(textField_Settings_Proficiency.getText());
+				settings.saveSettings();
+			}
+		});
 		textField_Settings_Proficiency.setText("5,9,13,17");
 		textField_Settings_Proficiency.setBounds(12, 69, 114, 20);
 		panel_Settings.add(textField_Settings_Proficiency);
@@ -1589,12 +1596,19 @@ public class App extends JFrame {
 		lblDefaultCharacterRoll.setBounds(12, 91, 124, 16);
 		panel_Settings.add(lblDefaultCharacterRoll);
 		
-		txtd = new JTextField();
-		txtd.setHorizontalAlignment(SwingConstants.CENTER);
-		txtd.setText("3d6");
-		txtd.setColumns(10);
-		txtd.setBounds(12, 105, 114, 20);
-		panel_Settings.add(txtd);
+		textField_Settings_CharRoll = new JTextField();
+		textField_Settings_CharRoll.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				settings.setDefaultCharRoll(textField_Settings_CharRoll.getText());
+				settings.saveSettings();
+			}
+		});
+		textField_Settings_CharRoll.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_Settings_CharRoll.setText("3d6");
+		textField_Settings_CharRoll.setColumns(10);
+		textField_Settings_CharRoll.setBounds(12, 105, 114, 20);
+		panel_Settings.add(textField_Settings_CharRoll);
 		
 		JLabel lblRaceList = new JLabel("Race list");
 		lblRaceList.setBounds(549, 0, 88, 16);
@@ -1688,6 +1702,11 @@ public class App extends JFrame {
 			}
 		});
 		list_Settings_Class.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		JLabel lblNotUsedYet = new JLabel("Not used yet");
+		lblNotUsedYet.setFont(new Font("Dialog", Font.BOLD, 10));
+		lblNotUsedYet.setBounds(125, 70, 60, 14);
+		panel_Settings.add(lblNotUsedYet);
 		
 		JPanel panel_Info = new JPanel();
 		panel_Info.setBackground(Color.LIGHT_GRAY);
@@ -1863,6 +1882,7 @@ public class App extends JFrame {
 					
 					//get settings file for last used campaign
 					if(new File(workDir + fSep + "Settings.txt").exists()){
+						System.out.println(new File(workDir + fSep + "Settings.txt"));
 						try (
 							    BufferedReader br = new BufferedReader(new FileReader( new File(workDir + fSep + "Settings.txt")));
 						){
@@ -1872,12 +1892,12 @@ public class App extends JFrame {
 							line = br.readLine(); //version of save file;
 							line = br.readLine(); //last known campaign name.
 							str = line.split(":: ");
-							setCampaignTo(str[1]);
+							setCampaignTo(str[1], false);
 							lastKnownCampaignName = str[1];
 							
 							br.close();
 						} catch (FileNotFoundException e1) {
-							e1.printStackTrace();
+							System.out.println("Couln't find settings file " + new File(workDir + fSep + "Settings.txt") + "");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
@@ -2253,7 +2273,7 @@ public class App extends JFrame {
 	}
 
 	protected void rollNewCharacterStats() {
-		String rollInfo[] = getDiceRollInfo(txt_Char_DiceRoll.getText());
+		String rollInfo[] = getDiceRollInfo(textField_Char_DiceRoll.getText());
 		
 		int diceToRoll = Integer.parseInt(rollInfo[0]);
 		int diceSideToRoll = Integer.parseInt(rollInfo[1]);
@@ -2390,7 +2410,7 @@ public class App extends JFrame {
 
 
 	protected void createNewCharacter(String name) {
-		String rollInfo[] = getDiceRollInfo(txt_Char_DiceRoll.getText());
+		String rollInfo[] = getDiceRollInfo(textField_Char_DiceRoll.getText());
 		
 		int diceToRoll = Integer.parseInt(rollInfo[0]);
 		int diceSideToRoll = Integer.parseInt(rollInfo[1]);
@@ -2582,8 +2602,12 @@ public class App extends JFrame {
 		comboBox_Dungeon_Campaign.addItem(campaignName);
 		comboBox_Settings_Campaign.addItem(campaignName);
 	}
+	
+	private void setCampaignTo(String line){
+		setCampaignTo(line, false);
+	}
 
-	private void setCampaignTo(String line) {
+	private void setCampaignTo(String line, boolean save) {
 		
 		int n = comboBox_Character_Campaign.getItemCount();
 		for(int i = 0; i < n; i++){
@@ -2628,6 +2652,7 @@ public class App extends JFrame {
 		campaign = new Campaign(this, line);
 		lastKnownCampaignName = line;
 		settings.loadSettings(line);
+		loadCampaignSettings();
 		
 		charList = (ArrayList<String>) campaign.getCharacters().clone();
 		list_Characters.removeAll();
@@ -2661,9 +2686,16 @@ public class App extends JFrame {
 			
 			
 		}
-		
+		if(save) settings.saveSettings();
 		
 	}
+
+	private void loadCampaignSettings() {
+		textField_Settings_Proficiency.setText(settings.getProficiency());
+		textField_Settings_CharRoll.setText(settings.getDefaultCharRoll());
+		textField_Char_DiceRoll.setText(settings.getDefaultCharRoll()); //set this too, as its the default roll.
+	}
+
 
 	protected String getNewCharacterName() {
 		String text = "error";
