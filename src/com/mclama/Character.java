@@ -42,11 +42,11 @@ public class Character {
 		this.app = app;
 		this.name = name;
 		
-		File ccDir = new File(App.workDir + "\\Campaigns\\" + App.campaign.getName() + "\\Characters\\");
+		File ccDir = new File(App.workDir + App.fSep + "Campaigns" + App.fSep + App.campaign.getName() + App.fSep + "Characters" + App.fSep);
 		
 		if(ccDir.exists())
 		{
-			File character = new File(ccDir + "\\" + name + ".txt");
+			File character = new File(ccDir + App.fSep + name + ".txt");
 			
 			try (BufferedReader br = new BufferedReader(new FileReader(new File(character+"")));)
 			{
@@ -182,11 +182,11 @@ public class Character {
 					app.addCharToList(name);
 				}
 			}
-			File ccDir = new File(App.workDir + "\\Campaigns\\" + App.campaign.getName() + "\\Characters\\");
+			File ccDir = new File(App.workDir + App.fSep + "Campaigns" + App.fSep + App.campaign.getName() + App.fSep + "Characters" + App.fSep);
 			// Campaigs/Characters directory
 			if(ccDir.exists())
 			{
-				File character = new File(ccDir + "\\" + name + ".txt");
+				File character = new File(ccDir + App.fSep + name + ".txt");
 				try 
 				{
 					PrintWriter out = new PrintWriter(character);

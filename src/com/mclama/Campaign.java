@@ -30,18 +30,18 @@ public class Campaign {
 	public void getCharacterList(String name) {
 		characters = new ArrayList<String>();
 		
-		String cDir = App.workDir + "\\Campaigns\\" + name + "\\";
+		String cDir = App.workDir + App.fSep + "Campaigns" + App.fSep + name + App.fSep;
 		
 		if(new File(cDir).exists()){
-			if(new File(cDir + "Characters\\").exists()){
+			if(new File(cDir + "Characters" + App.fSep).exists()){
 				//if exist, then begin adding every folder in directory to the list.
 				
-				File file = new File(cDir + "Characters\\");
+				File file = new File(cDir + "Characters" + App.fSep);
 				String[] fNames = file.list();
 
 				for(String folder : fNames)
 				{
-					if (new File(cDir + "Characters\\" + folder).isFile())
+					if (new File(cDir + "Characters" + App.fSep + folder).isFile())
 				    {
 						if(folder.replace(".txt", "") != null){
 							//app.addCharToList(folder.replace(".txt", ""));
@@ -58,19 +58,19 @@ public class Campaign {
 	public void getTownList(String name) {
 		towns = new ArrayList<String>();
 		
-		String cDir = App.workDir + "\\Campaigns\\" + name + "\\";
+		String cDir = App.workDir + App.fSep + "Campaigns" + App.fSep + name + App.fSep;
 		//campaign Directory
 		
 		if(new File(cDir).exists()){
-			if(new File(cDir + "Towns\\").exists()){
+			if(new File(cDir + "Towns" + App.fSep).exists()){
 				//if exist, then begin adding every folder in directory to the list.
 				
-				File folder = new File(cDir + "Towns\\");
+				File folder = new File(cDir + "Towns" + App.fSep);
 				String[] fNames = folder.list();
 
 				for(String file : fNames)
 				{
-					if (new File(folder + "\\" +  file).isFile())
+					if (new File(folder + App.fSep +  file).isFile())
 				    {
 						if(file.replace(".txt", "") != null){
 							//app.addTownToList(file.replace(".txt", ""));

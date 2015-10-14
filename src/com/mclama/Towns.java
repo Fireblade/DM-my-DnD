@@ -21,7 +21,7 @@ public class Towns {
 	
 	public void loadTown(String name) {
 		this.name = name;
-		File saveDir = new File(app.workDir + "\\Campaigns\\" + app.campaign.getName() + "\\Towns\\" + name + ".txt");
+		File saveDir = new File(app.workDir + App.fSep + "Campaigns" + App.fSep + app.campaign.getName() + App.fSep + "Towns" + App.fSep + name + ".txt");
 		
 		if(saveDir.exists())
 		{
@@ -56,14 +56,14 @@ public class Towns {
 				app.lastKnownTownName=name;
 				app.addTownToList(name);
 			}
-			File ctDir = new File(App.workDir + "\\Campaigns\\" + App.campaign.getName() + "\\Towns\\");
+			File ctDir = new File(App.workDir + App.fSep + "Campaigns" + App.fSep + App.campaign.getName() + App.fSep + "Towns" + App.fSep);
 			// Campaigns/Towns directory
 			if(!ctDir.exists())
 			{
 				ctDir.mkdirs();
 			}
 			
-			File town = new File(ctDir + "\\" + name + ".txt");
+			File town = new File(ctDir + App.fSep + name + ".txt");
 			try 
 			{
 				PrintWriter out = new PrintWriter(town);

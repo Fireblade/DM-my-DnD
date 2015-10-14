@@ -88,6 +88,9 @@ public class App extends JFrame {
 	private static String lastKnownCampaignName = "";
 	private static String lastKnownNotes= "";
 	private static String lastKnownSpells= "";
+	
+	public static String lSep = System.getProperty("line.separator");
+	public static String fSep = System.getProperty("file.separator");
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -188,7 +191,7 @@ public class App extends JFrame {
 			//workDir=new File(App.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile().getPath();
 			System.out.println("Running from " + workDir);
 			
-			if(!new File(workDir+"\\Name List.txt").exists()){
+			if(!new File(workDir + fSep +"Name List.txt").exists()){
 				System.out.println("Export: " + ExportResource("/Name List.txt"));
 			} else System.out.println("Found Name List.txt...");
 			
@@ -883,9 +886,9 @@ public class App extends JFrame {
 				
 				if(!prevName.equals(newName))
 				{
-					if(!new File(workDir + "\\Campaigns\\" + campaign.getName() + "\\Characters\\" + newName + ".txt").exists())
+					if(!new File(workDir + fSep +"Campaigns"+ fSep + campaign.getName() + fSep +"Characters" + fSep + newName + ".txt").exists())
 					{//if new character name doesn't already exist
-						File file = new File(workDir + "\\Campaigns\\" + campaign.getName() + "\\Characters\\" + prevName + ".txt");
+						File file = new File(workDir + fSep +"Campaigns"+ fSep + campaign.getName() + fSep +"Characters" + fSep + prevName + ".txt");
 						
 						character.setName(newName);
 						//textField_Char_Name.setText(newName);
@@ -914,7 +917,7 @@ public class App extends JFrame {
 				String newName = getNewCharacterName();
 				
 				//File here = new File("");
-				File file = new File(workDir + "\\Campaigns\\" + campaign.getName() + "\\Characters\\" + prevName + ".txt");
+				File file = new File(workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Characters" + fSep + prevName + ".txt");
 				
 				character.setName(newName);
 				textField_Char_Name.setText(newName);
@@ -1217,9 +1220,9 @@ public class App extends JFrame {
 				
 				if(!prevName.equals(newName)) //if not equal, then we have a rename.
 				{
-					if(!new File(workDir + "\\Campaigns\\" + campaign.getName() + "\\Towns\\" + newName + ".txt").exists())
+					if(!new File(workDir + fSep + "Campaigns" + fSep+ campaign.getName() + fSep + "Towns" + fSep + newName + ".txt").exists())
 					{ //if town name isn't already in use....
-						File file = new File(workDir + "\\Campaigns\\" + campaign.getName() + "\\Towns\\" + prevName + ".txt");
+						File file = new File(workDir + fSep +"Campaigns" + fSep + campaign.getName() + fSep + "Towns" + fSep + prevName + ".txt");
 						
 						town.setName(newName);
 						//textField_Towns_Name.setText(newName);
@@ -1305,11 +1308,11 @@ public class App extends JFrame {
 		textArea_Notes_Notes.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				File file = new File(App.workDir + "\\Campaigns\\" + campaign.getName() + "\\Notes.txt");
+				File file = new File(App.workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Notes.txt");
 				
 				try {
 					PrintWriter out = new PrintWriter(file);
-					out.println(textArea_Notes_Notes.getText().replace("\n", "\\n").replace("\r",""));
+					out.println(textArea_Notes_Notes.getText().replace("\n", "]]~").replace("\r",""));
 					out.close();
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
@@ -1834,9 +1837,9 @@ public class App extends JFrame {
 		Thread updater = new Thread(){
 			public void run() {
 		
-				if(new File(workDir + "\\Campaigns\\").exists()){
+				if(new File(workDir + fSep + "Campaigns" + fSep).exists()){
 					//set up Campaign Combo Box
-					File file = new File(workDir + "\\Campaigns\\");
+					File file = new File(workDir + fSep + "Campaigns" + fSep);
 					String[] subDir = file.list();
 					
 					if(subDir.length==0){
@@ -1845,7 +1848,7 @@ public class App extends JFrame {
 					
 					for(String dir : subDir)
 					{
-					    if (new File(workDir + "\\Campaigns\\" + dir).isDirectory())
+					    if (new File(workDir + fSep + "Campaigns" + fSep + dir).isDirectory())
 					    {
 					        createNewCampaign(dir);
 					        System.out.println("Added `" + dir + "` to Campaign List");
@@ -1854,9 +1857,9 @@ public class App extends JFrame {
 					}
 					
 					//get settings file for last used campaign
-					if(new File(workDir + "\\Settings.txt").exists()){
+					if(new File(workDir + fSep + "Settings.txt").exists()){
 						try (
-							    BufferedReader br = new BufferedReader(new FileReader( new File(workDir + "\\Settings.txt")));
+							    BufferedReader br = new BufferedReader(new FileReader( new File(workDir + fSep + "Settings.txt")));
 						){
 							String line;
 							String[] str;
@@ -2556,7 +2559,7 @@ public class App extends JFrame {
 		lastKnownCampaignName = campaignName;
 		
 		
-		File newFolder = new File(workDir + "\\Campaigns\\" + campaignName);
+		File newFolder = new File(workDir + fSep + "Campaigns" + fSep + campaignName);
 		if(newFolder.exists()){
 			setCampaignTo(campaignName); //if exists, go to it
 		} else if(newFolder.mkdirs()){   //else we need to create the campaign
@@ -2628,16 +2631,23 @@ public class App extends JFrame {
 		list_Towns_Towns.removeAll();
 		updateTownsList();
 		
-		File file = new File(App.workDir + "\\Campaigns\\" + campaign.getName() + "\\Notes.txt");
+		File file = new File(App.workDir + fSep + "Campaigns" + fSep + campaign.getName() + fSep + "Notes.txt");
 		
 		if(file.exists()){
 			try (BufferedReader br = new BufferedReader(new FileReader(file));)
 			{
 				
 				String notes = "";
-				try { notes = br.readLine(); //first line is notes.
-						notes = notes.replace("\\n","\n");
-				} catch (Exception e) {/*e.printStackTrace();*/}
+				try { notes = br.readLine(); /*first line is notes.*/}catch (Exception e) {}
+//				try 
+//				{ 
+//					notes = br.readLine(); //first line is notes.
+//					notes = notes.replace("\\n","\n");
+//				} catch (Exception e) {/*e.printStackTrace();*/}
+				
+				if(notes.contains("\\n")) notes = notes.replace("\\n","\n");
+				else notes = notes.replace("]]~",System.getProperty("line.separator"));
+				
 				
 				textArea_Notes_Notes.setText(notes);
 				
@@ -2659,7 +2669,7 @@ public class App extends JFrame {
 		String text = "error";
 		int maxLines=1;
 		try {
-			maxLines = count(workDir+ "\\Name List.txt");
+			maxLines = count(workDir + fSep + "Name List.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -2816,10 +2826,10 @@ public class App extends JFrame {
 		int count=0;
 		if(i==0){i++;}
 		try (
-//		    InputStream fis = new FileInputStream(workDir + "\\Name List.txt");
+//		    InputStream fis = new FileInputStream(workDir + fSep + "Name List.txt");
 //		    InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
 //		    BufferedReader br = new BufferedReader(isr);
-				BufferedReader br = new BufferedReader(new FileReader( new File(workDir + "\\Name List.txt")));
+				BufferedReader br = new BufferedReader(new FileReader( new File(workDir + fSep + "Name List.txt")));
 		) {
 			while(count!=i){
 				count++;

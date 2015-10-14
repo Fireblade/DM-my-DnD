@@ -24,7 +24,7 @@ public class Settings {
 	}
 	
 	public void saveSettings(){
-		File saveDir = new File(app.workDir + "\\Campaigns\\" + app.campaign.getName() + "\\Settings.txt");
+		File saveDir = new File(app.workDir + App.fSep + "Campaigns" + App.fSep + app.campaign.getName() + App.fSep + "Settings.txt");
 		if(true){
 			
 			
@@ -54,7 +54,7 @@ public class Settings {
 	}
 	
 	public void loadSettings(String campaign){
-		File saveDir = new File(app.workDir + "\\Campaigns\\" + campaign + "\\Settings.txt");
+		File saveDir = new File(app.workDir + App.fSep + "Campaigns" + App.fSep + campaign + App.fSep + "Settings.txt");
 		
 		if(saveDir.exists())
 		{
