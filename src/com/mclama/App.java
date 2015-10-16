@@ -84,7 +84,7 @@ import javax.swing.table.TableModel;
 public class App extends JFrame {
 	
 	public static int buildn = 1; //build number, I will usually increase this when something needs to know when it can work.
-	public static String version = "v1.0.0";
+	public static String version = "v1.0.1";
 	
 	private static long PRESSED_ENTER=0;
 	private static String lastKnownCharacterName = "";
@@ -1156,6 +1156,7 @@ public class App extends JFrame {
 		panel_Towns.add(lblCharacterFilter);
 		
 		JButton btnRollTownName = new JButton("Roll Name");
+		btnRollTownName.setEnabled(false);
 		btnRollTownName.setFont(new Font("Dialog", Font.BOLD, 8));
 		btnRollTownName.setBounds(406, 38, 72, 20);
 		panel_Towns.add(btnRollTownName);
