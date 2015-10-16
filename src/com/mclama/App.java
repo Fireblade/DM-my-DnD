@@ -2251,15 +2251,24 @@ public class App extends JFrame {
 	}
 
 	private void updateStatMods() {
-		textField_Char_StrMod.setText((int) Math.floor((getStr()-10)/2)+"");
-		textField_Char_DexMod.setText((int) Math.floor((getDex()-10)/2)+"");
-		textField_Char_ConMod.setText((int) Math.floor((getCon()-10)/2)+"");
-		textField_Char_IntMod.setText((int) Math.floor((getInt()-10)/2)+"");
-		textField_Char_WisMod.setText((int) Math.floor((getWis()-10)/2)+"");
-		textField_Char_ChaMod.setText((int) Math.floor((getCon()-10)/2)+"");
+		int Str = setModifier(getStr());
+		int Dex = setModifier(getDex());
+		int Con = setModifier(getCon());
+		int Int = setModifier(getInt());
+		int Wis = setModifier(getWis());
+		int Cha = setModifier(getCha());
+		
+		textField_Char_StrMod.setText(setModifier(getStr())+"");
+		textField_Char_DexMod.setText(setModifier(getDex())+"");
+		textField_Char_ConMod.setText(setModifier(getCon())+"");
+		textField_Char_IntMod.setText(setModifier(getInt())+"");
+		textField_Char_WisMod.setText(setModifier(getWis())+"");
+		textField_Char_ChaMod.setText(setModifier(getCha())+"");
 	}
-	
-	
+
+	private int setModifier(int i) {
+		return (int) (-5 + Math.floor(i/2));
+	}
 
 	void updateCharacterList() {
 		SortedListModel model = new SortedListModel();
